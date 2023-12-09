@@ -3,95 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Trash Segregation App</title>
-    <script async src="https://docs.opencv.org/master/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+    <title>Video Stream Prediction</title>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <style>
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #3498db;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: auto;
-            margin-top: 20px;
-            display: none; /* Initially hide the spinner */
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
 </head>
 <body>
-    <div id="modelResults"></div>
-    <video id="camera" width="640" height="480" autoplay></video>
-    <div class="spinner"></div>
-
-    <script>
-        // Access user's camera
-        async function startCamera() {
-            navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                const video = document.getElementById('camera');
-                video.srcObject = stream;
-            })
-            .catch(error => console.error('Error accessing camera:', error));
-        }
-
-        // Wait for OpenCV.js to be ready
-        function onOpenCvReady() {
-            // Your OpenCV.js code can go here
-            console.log('OpenCV.js is ready!');
-            
-            // Access the camera and process frames
-            startCamera();
-        }
-
-        // ... Existing code, including TensorFlow.js and OpenCV.js integration
-
-        // Function to display model results
-        function displayModelResults(results) {
-            // Assuming 'results' is an array or a string representing the model output
-
-            // Get the HTML element where you want to display the results
-            const resultElement = document.getElementById('modelResults');
-
-            // Update the content of the element
-            resultElement.innerHTML = `<p>Model Results: ${results}</p>`;
-
-            // Hide the spinner after displaying the results
-            document.querySelector('.spinner').style.display = 'none';
-        }
-
-        // Function to process frames (updated with model prediction)
-        async function processFrames(video) {
-            // Display the loading spinner
-            document.querySelector('.spinner').style.display = 'block';
-
-            // ... Existing code to process frames
-
-            // Perform the model prediction
-            const predictions = model.predict(tensor);
-
-            // Display the model results in the HTML
-            displayModelResults(predictions.dataSync());
-
-            // Continue with the rest of the frame processing logic
-            requestAnimationFrame(() => processFrames(video));
-        }
-    </script>
-
-    <script>
-        async function loadModel() {
-            const model = await tf.loadLayersModel('C:/Users/ML_Ca/EmTech_TrashSegregation/tm-my-image-model/model.json');
-            // Perform inference or any other tasks with the loaded model
-        }
-
-        // Call the loadModel function when the page loads
-        loadModel();
-    </script>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <script src="main.js"></script>
 </body>
 </html>
