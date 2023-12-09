@@ -17,20 +17,40 @@ async function init() {
     // Note: the pose library adds "tmImage" object to your window (window.tmImage)
     model = await tmImage.load(modelURL, metadataURL);
     maxPredictions = model.getTotalClasses();
-    
+    // Set up the camera to use the main camera (rear-facing camera)
     const flip = true; // whether to flip the camera feed
-    const cameraOptions = {
-        facingMode: { exact: "environment" },
-        width: 200,
-        height: 200,
-        flip,
+
+    // Get user media
+    const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } },
+    });
+
+    // Create a video element to display the camera feed
+    const video = document.createElement("video");
+    video.srcObject = stream;
+    video.width = 200;
+    video.height = 200;
+    video.autoplay = true;
+    document.body.appendChild(video);
+
+    // Create a canvas element to capture frames from the video
+    const canvas = document.createElement("canvas");
+    canvas.width = 200;
+    canvas.height = 200;
+    document.body.appendChild(canvas);
+
+    // Create a canvas context
+    const ctx = canvas.getContext("2d");
+
+    // Webcam update function
+    const updateWebcam = () => {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        requestAnimationFrame(updateWebcam);
     };
 
-    // Create a new Camera instance without specifying a container
-    webcam = new tmImage.Camera(cameraOptions);
-    await webcam.setup();
-    await webcam.play();
-    window.requestAnimationFrame(loop);
+    // Start updating the webcam
+    updateWebcam();
+    
     // append elements to the DOM
     document.getElementById("webcam-container").appendChild(webcam.canvas);
     labelContainer = document.getElementById("label-container");
