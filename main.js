@@ -18,14 +18,8 @@ async function init() {
     model = await tmImage.load(modelURL, metadataURL);
     maxPredictions = model.getTotalClasses();
 
-    const flip = true; // whether to flip the camera feed
-    const cameraOptions = {
-        facingMode: "environment", // use the rear-facing camera (main camera)
-        width: 200,
-        height: 200,
-        flip,
-    };
-    webcam = new tmImage.Camera(webcamContainer, cameraOptions);
+    const flip = false; // whether to flip the camera feed
+    webcam = new tmImage.Camera(400, 400, flip);
     await webcam.setup();
     await webcam.play();
     window.requestAnimationFrame(loop);
@@ -36,7 +30,7 @@ async function init() {
     for (let i = 0; i < maxPredictions; i++) { // and class labels
         labelContainer.appendChild(document.createElement("div"));
     }
-    
+
     const startButton = document.getElementById("startButton");
     startButton.style.display = "none";
 }
