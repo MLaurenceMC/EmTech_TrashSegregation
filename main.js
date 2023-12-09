@@ -34,8 +34,6 @@ async function init() {
     video.width = 200;
     video.height = 200;
     video.autoplay = true;
-    document.body.appendChild(video);
-
     // Create a canvas element to capture frames from the video
     canvas = document.createElement("canvas");
     canvas.width = 200;
@@ -46,6 +44,7 @@ async function init() {
     ctx = canvas.getContext("2d");
 
     // Append elements to the DOM
+    const predictionContainer = document.getElementById("prediction-container");
     labelContainer = document.getElementById("label-container");
     for (let i = 0; i < maxPredictions; i++) {
         labelContainer.appendChild(document.createElement("div"));
@@ -60,22 +59,33 @@ async function init() {
 
 async function loop() {
     await predict(); // predict should be called before updating the webcam
+    updateMostProbablePrediction(); // Update the most probable prediction
     requestAnimationFrame(loop);
 }
 
 // Run the webcam image through the image model
 async function predict() {
-    // Ensure ctx is defined before calling drawImage
-    if (ctx) {
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const prediction = await model.predict(canvas);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const prediction = await model.predict(canvas);
 
-        for (let i = 0; i < maxPredictions; i++) {
-            const classPrediction =
-                prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-            labelContainer.childNodes[i].innerHTML = classPrediction;
-        }
+    for (let i = 0; i < maxPredictions; i++) {
+        const classPrediction =
+            prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+        labelContainer.childNodes[i].innerHTML = classPrediction;
     }
+}
+
+// Function to update the most probable prediction
+function updateMostProbablePrediction() {
+    const predictions = model.predict(canvas);
+
+    // Find the prediction with the highest probability
+    let mostProbablePrediction = predictions.reduce((max, prediction) => {
+        return prediction.probability > max.probability ? prediction : max;
+    });
+
+    // Display the most probable prediction
+    predictionContainer.innerHTML = `Most Probable: ${mostProbablePrediction.className}`;
 }
 
 // Call init to start the application
