@@ -21,8 +21,12 @@ async function init() {
     const flip = true; // whether to flip the camera feed
 
     // Get user media
-    const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: "environment" } },
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then((stream) => {
+        video.srcObject = stream;
+    })
+    .catch((error) => {
+        console.error('Error accessing the webcam: ', error);
     });
 
     // Create a video element to display the camera feed
@@ -50,7 +54,6 @@ async function init() {
 
     // Start updating the webcam
     updateWebcam();
-    
     // append elements to the DOM
     document.getElementById("webcam-container").appendChild(webcam.canvas);
     labelContainer = document.getElementById("label-container");
