@@ -76,8 +76,8 @@ async function predict() {
 }
 
 // Function to update the most probable prediction
-function updateMostProbablePrediction() {
-    const predictions = model.predict(canvas);
+async function updateMostProbablePrediction() {
+    const predictions = await model.predict(canvas);
 
     // Find the prediction with the highest probability
     let mostProbablePrediction = predictions.reduce((max, prediction) => {
