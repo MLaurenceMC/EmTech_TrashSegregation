@@ -53,6 +53,9 @@ async function init() {
 
     const startButton = document.getElementById("startButton");
     startButton.style.display = "none";
+
+    // Start the loop after initializing
+    loop();
 }
 
 async function loop() {
@@ -62,19 +65,18 @@ async function loop() {
 
 // Run the webcam image through the image model
 async function predict() {
-    // predict can take in an image, video, or canvas HTML element
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const prediction = await model.predict(canvas);
+    // Ensure ctx is defined before calling drawImage
+    if (ctx) {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const prediction = await model.predict(canvas);
 
-    for (let i = 0; i < maxPredictions; i++) {
-        const classPrediction =
-            prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-        labelContainer.childNodes[i].innerHTML = classPrediction;
+        for (let i = 0; i < maxPredictions; i++) {
+            const classPrediction =
+                prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            labelContainer.childNodes[i].innerHTML = classPrediction;
+        }
     }
 }
 
 // Call init to start the application
 init();
-
-// Start the loop after initializing
-loop();
