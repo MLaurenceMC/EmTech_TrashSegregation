@@ -49,7 +49,7 @@ function runModel(imageData) {
     if (model) {
         // Implement your model prediction logic here
         // Use the imageData or convert it to a suitable format for your model
-        // Example: const result = model.predict(convertImageDataToTensor(imageData));
+        const result = model.predict(convertImageDataToTensor(imageData));
         // Return the prediction result
         return result;
     } else {
