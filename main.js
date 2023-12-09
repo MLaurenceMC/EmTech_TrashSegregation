@@ -5,6 +5,7 @@
 const URL = "./tm-my-image-model/";
 
 let model, labelContainer, maxPredictions;
+let video, canvas, ctx;
 
 // Load the image model and setup the webcam
 async function init() {
@@ -28,7 +29,7 @@ async function init() {
     });
 
     // Create a video element to display the camera feed
-    const video = document.createElement("video");
+    video = document.createElement("video");
     video.srcObject = stream;
     video.width = 200;
     video.height = 200;
@@ -36,22 +37,13 @@ async function init() {
     document.body.appendChild(video);
 
     // Create a canvas element to capture frames from the video
-    const canvas = document.createElement("canvas");
+    canvas = document.createElement("canvas");
     canvas.width = 200;
     canvas.height = 200;
     document.body.appendChild(canvas);
 
     // Create a canvas context
-    const ctx = canvas.getContext("2d");
-
-    // Webcam update function
-    const updateWebcam = () => {
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        requestAnimationFrame(updateWebcam);
-    };
-
-    // Start updating the webcam
-    updateWebcam();
+    ctx = canvas.getContext("2d");
 
     // Append elements to the DOM
     labelContainer = document.getElementById("label-container");
@@ -71,7 +63,9 @@ async function loop() {
 // Run the webcam image through the image model
 async function predict() {
     // predict can take in an image, video, or canvas HTML element
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     const prediction = await model.predict(canvas);
+
     for (let i = 0; i < maxPredictions; i++) {
         const classPrediction =
             prediction[i].className + ": " + prediction[i].probability.toFixed(2);
