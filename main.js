@@ -45,6 +45,7 @@ async function init() {
 
     // Append elements to the DOM
     const predictionContainer = document.getElementById("prediction-container");
+    predictionContainer.appendChild(document.createElement("div"));
     labelContainer = document.getElementById("label-container");
     for (let i = 0; i < maxPredictions; i++) {
         labelContainer.appendChild(document.createElement("div"));
