@@ -1,4 +1,4 @@
-const model = await tf.loadLayersModel('C:\Users\ML_Ca\EmTech_TrashSegregation\tm-my-image-model\model.json');
+const model = await tf.loadLayersModel('C:\\Users\\ML_Ca\\EmTech_TrashSegregation\\tm-my-image-model\\model.json');
 
 // Wait for OpenCV.js to be ready
 function onOpenCvReady() {
