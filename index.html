@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Access</title>
+    <script async src="https://docs.opencv.org/master/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+</head>
+<body>
+    <h1>Teachable Machine Model Demo</h1>
+    <h1>Camera Access Demo</h1>
+    <video id="camera" width="640" height="480" autoplay></video>
+
+    <script>
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                const video = document.getElementById('camera');
+                video.srcObject = stream;
+            })
+            .catch(error => console.error('Error accessing camera:', error));
+    </script>
+
+    <script>
+        async function loadModel() {
+            const model = await tf.loadLayersModel('C:\Users\ML_Ca\EmTech_TrashSegregation\tm-my-image-model\model.json');
+            // Perform inference or any other tasks with the loaded model
+        }
+
+        // Call the loadModel function when the page loads
+        loadModel();
+    </script>
+</body>
+</html>
