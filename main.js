@@ -21,7 +21,7 @@ async function init() {
     const flip = true; // whether to flip the camera feed
 
     // Get user media
-    navigator.mediaDevices.getUserMedia({ video: true })
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true })
     .then((stream) => {
         video.srcObject = stream;
     })
