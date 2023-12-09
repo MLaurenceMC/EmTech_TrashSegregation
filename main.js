@@ -17,13 +17,20 @@ async function init() {
     // Note: the pose library adds "tmImage" object to your window (window.tmImage)
     model = await tmImage.load(modelURL, metadataURL);
     maxPredictions = model.getTotalClasses();
+    
+    const flip = true; // whether to flip the camera feed
+    const cameraOptions = {
+        facingMode: { exact: "environment" },
+        width: 200,
+        height: 200,
+        flip,
+    };
 
-    const flip = false; // whether to flip the camera feed
-    webcam = new tmImage.Webcam(400, 400, flip);
+    // Create a new Camera instance without specifying a container
+    webcam = new tmImage.Camera(cameraOptions);
     await webcam.setup();
     await webcam.play();
     window.requestAnimationFrame(loop);
-
     // append elements to the DOM
     document.getElementById("webcam-container").appendChild(webcam.canvas);
     labelContainer = document.getElementById("label-container");
